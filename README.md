@@ -12,10 +12,14 @@ idp-gitops-application/
 ├── manifests/<app名>/     … アプリケーションのK8sマニフェスト(CIがimage tagを書き換える)
 ├── argocd/<app名>.yaml    … Argo CD Application定義(dev-team AppProject配下)
 ├── docs/                  … 開発チーム向けドキュメント
-└── .github/workflows/     … CI/CD(ビルド・イメージpush・manifest更新・smoke test)
+└── .github/workflows/     … CI/CD呼び出し用workflow(実処理はidp-workflowsのReusable workflow)
 ```
 
 1つのアプリが複数マイクロサービスで構成される場合も、`apps/<app名>/`・
 `manifests/<app名>/`という単位を保つ(例: `apps/order-api/`, `apps/order-worker/`)。
+
+`.github/workflows/`配下のファイルは、ビルド・イメージpush・manifest更新・smoke testといった
+実処理を持たず、`idp-workflows`リポジトリのReusable workflowを`uses:`で呼び出すだけの薄い
+定義にする。CI/CDのベースロジックはPlatform teamが`idp-workflows`側で一元管理する。
 
 新規アプリの追加方法は[`docs/adding-a-new-app.md`](./docs/adding-a-new-app.md)を参照。
