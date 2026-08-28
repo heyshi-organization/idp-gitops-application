@@ -1,1 +1,21 @@
 # idp-gitops-application
+
+開発チームが所有するワークロード用リポジトリ。ここに変更をpushすると、
+Platform team管理の`idp-gitops-platform`側のApp of Apps(`dev-team-root-app`)が
+`argocd/`配下を検知し、Argo CD経由で自動的にクラスタへ反映される。
+
+## ディレクトリ構成
+
+```
+idp-gitops-application/
+├── apps/<app名>/          … アプリケーションのソースコード
+├── manifests/<app名>/     … アプリケーションのK8sマニフェスト(CIがimage tagを書き換える)
+├── argocd/<app名>.yaml    … Argo CD Application定義(dev-team AppProject配下)
+├── docs/                  … 開発チーム向けドキュメント
+└── .github/workflows/     … CI/CD(ビルド・イメージpush・manifest更新・smoke test)
+```
+
+1つのアプリが複数マイクロサービスで構成される場合も、`apps/<app名>/`・
+`manifests/<app名>/`という単位を保つ(例: `apps/order-api/`, `apps/order-worker/`)。
+
+新規アプリの追加方法は[`docs/adding-a-new-app.md`](./docs/adding-a-new-app.md)を参照。
