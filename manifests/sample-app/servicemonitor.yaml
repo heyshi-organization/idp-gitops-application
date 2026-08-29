@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sample-app
+  labels:
+    app: sample-app
+    # kube-prometheus-stackのPrometheusはデフォルトで `release: <helmリリース名>` ラベルの
+    # ServiceMonitorを拾う設定になっている。Applicationのrelease nameが `kube-prometheus-stack`
+    # であることに合わせている。
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: sample-app
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

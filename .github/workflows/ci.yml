@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/sample-app/**"
+
+jobs:
+  build-and-deploy-manifest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    defaults:
+      run:
+        working-directory: apps/sample-app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn build
+
+      - name: Compute image tag
+        id: meta
+        run: echo "tag=sha-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: apps/sample-app
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/develop-pe-env-sample-app:${{ steps.meta.outputs.tag }}
+
+      - name: Bump image tag in manifest and commit
+        working-directory: .
+        run: |
+          sed -i "s#develop-pe-env-sample-app:.*#develop-pe-env-sample-app:${{ steps.meta.outputs.tag }}#" \
+            manifests/sample-app/deployment.yaml
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: bump sample-app image to ${{ steps.meta.outputs.tag }}" || echo "no changes to commit"
+          git push

@@ -1,0 +1,23 @@
+name: Post-Deploy Smoke Test
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+  workflow_dispatch: {}
+
+jobs:
+  smoke:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    # gitops/apps/arc-runner-scale-set.yaml の runnerScaleSetName と合わせている
+    runs-on: pe-env-runners
+    steps:
+      - name: Check Argo CD sync/health status
+        run: |
+          argocd app get sample-app --grpc-web -o json \
+            | jq -e '.status.sync.status == "Synced" and .status.health.status == "Healthy"'
+
+      - name: Check sample-app /metrics is reachable in-cluster
+        run: |
+          kubectl -n sample-app run smoke-curl --rm -i --restart=Never --image=curlimages/curl -- \
+            curl -sf http://sample-app.sample-app.svc.cluster.local:3000/metrics | head -5

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>sample-app</title>
+  <style>
+    body { font-family: sans-serif; max-width: 40rem; margin: 3rem auto; line-height: 1.6; }
+    code { background: #eee; padding: 0.1em 0.4em; border-radius: 0.2em; }
+    ul { padding-left: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>sample-app</h1>
+  <p>
+    develop-pe-env の監視検証用サンプルアプリです。
+    Kind上にデプロイされ、Prometheus/Grafanaでのメトリクス監視の対象になります。
+  </p>
+  <ul>
+    <li><a href="/api/hello">/api/hello</a> — 動作確認用のダミーAPI</li>
+    <li><a href="/metrics">/metrics</a> — Prometheusのスクレイプ対象</li>
+    <li><a href="/healthz">/healthz</a> — liveness/readinessプローブ用</li>
+  </ul>
+</body>
+</html>

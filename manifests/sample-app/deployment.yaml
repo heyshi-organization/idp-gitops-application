@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app
+  labels:
+    app: sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+        - name: sample-app
+          # CIが `apps/sample-app/` への変更をpushするたびにこのタグを書き換える
+          # (.github/workflows/ci.yml 参照)。初回は README のフェーズ5に従って手動で反映する。
+          image: ghcr.io/heyshi/develop-pe-env-sample-app:init
+          ports:
+            - name: http
+              containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          resources:
+            requests: { cpu: 25m, memory: 64Mi }
