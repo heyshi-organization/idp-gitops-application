@@ -2,7 +2,7 @@
 # dev-team AppProjectに属するため、destination/リソース種別はAppProjectで制限されている
 # (idp-gitops-platformリポジトリのplatform/argocd-bootstrap/dev-team-appproject.yaml参照)。
 # Namespaceはdev-team自身では作れない(Platform teamが idp-gitops-platformリポジトリの
-# platform/rbac/dev-team-namespace.yaml で用意する)ため、CreateNamespace=trueは付けていない。
+# platform/teams/dev-team/sample-app/namespace.yaml で用意する)ため、CreateNamespace=trueは付けていない。
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
