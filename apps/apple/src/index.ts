@@ -12,8 +12,8 @@ const register = new client.Registry();
 client.collectDefaultMetrics({ register });
 
 const httpRequestCounter = new client.Counter({
-  name: "sample_app_http_requests_total",
-  help: "Total number of HTTP requests handled by sample-app",
+  name: "apple_http_requests_total",
+  help: "Total number of HTTP requests handled by apple",
   labelNames: ["method", "route", "status"],
   registers: [register],
 });
@@ -34,7 +34,7 @@ app.get("/healthz", (_req, res) => {
 });
 
 app.get("/api/hello", (_req, res) => {
-  res.json({ message: "hello from sample-app", timestamp: new Date().toISOString() });
+  res.json({ message: "hello from apple", timestamp: new Date().toISOString() });
 });
 
 app.get("/metrics", async (_req, res) => {
@@ -44,5 +44,5 @@ app.get("/metrics", async (_req, res) => {
 
 const port = Number(process.env.PORT ?? 3000);
 app.listen(port, () => {
-  console.log(`sample-app listening on :${port}`);
+  console.log(`apple listening on :${port}`);
 });

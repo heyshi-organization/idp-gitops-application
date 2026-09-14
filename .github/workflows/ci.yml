@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "apps/sample-app/**"
+      - "apps/apple/**"
 
 jobs:
   build-and-deploy-manifest:
@@ -14,7 +14,7 @@ jobs:
       packages: write
     defaults:
       run:
-        working-directory: apps/sample-app
+        working-directory: apps/apple
     steps:
       - uses: actions/checkout@v4
 
@@ -38,16 +38,16 @@ jobs:
 
       - uses: docker/build-push-action@v6
         with:
-          context: apps/sample-app
+          context: apps/apple
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/develop-pe-env-sample-app:${{ steps.meta.outputs.tag }}
+          tags: ghcr.io/${{ github.repository_owner }}/develop-pe-env-apple:${{ steps.meta.outputs.tag }}
 
       - name: Bump image tag in manifest and commit
         working-directory: .
         run: |
-          sed -i "s#develop-pe-env-sample-app:.*#develop-pe-env-sample-app:${{ steps.meta.outputs.tag }}#" \
-            manifests/sample-app/deployment.yaml
+          sed -i "s#develop-pe-env-apple:.*#develop-pe-env-apple:${{ steps.meta.outputs.tag }}#" \
+            manifests/apple/deployment.yaml
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -am "chore: bump sample-app image to ${{ steps.meta.outputs.tag }}" || echo "no changes to commit"
+          git commit -am "chore: bump apple image to ${{ steps.meta.outputs.tag }}" || echo "no changes to commit"
           git push

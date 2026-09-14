@@ -1,7 +1,7 @@
 # idp-gitops-application
 
-開発チームが所有するワークロード用リポジトリ。ここに変更をpushすると、
-Platform team管理の`idp-gitops-platform`側のApp of Apps(`dev-team-root-app`)が
+プロダクトチームが所有するワークロード用リポジトリ。ここに変更をpushすると、
+プラットフォームチーム管理の`idp-gitops-platform`側のApp of Apps(`team-a-root-app`)が
 `argocd/`配下を検知し、Argo CD経由で自動的にクラスタへ反映される。
 
 ## ディレクトリ構成
@@ -10,8 +10,8 @@ Platform team管理の`idp-gitops-platform`側のApp of Apps(`dev-team-root-app`
 idp-gitops-application/
 ├── apps/<app名>/          … アプリケーションのソースコード
 ├── manifests/<app名>/     … アプリケーションのK8sマニフェスト(CIがimage tagを書き換える)
-├── argocd/<app名>.yaml    … Argo CD Application定義(dev-team AppProject配下)
-├── docs/                  … 開発チーム向けドキュメント
+├── argocd/<app名>.yaml    … Argo CD Application定義(team-a AppProject配下)
+├── docs/                  … プロダクトチーム向けドキュメント
 └── .github/workflows/     … CI/CD呼び出し用workflow(実処理はidp-workflowsのReusable workflow)
 ```
 
@@ -20,6 +20,6 @@ idp-gitops-application/
 
 `.github/workflows/`配下のファイルは、ビルド・イメージpush・manifest更新・smoke testといった
 実処理を持たず、`idp-workflows`リポジトリのReusable workflowを`uses:`で呼び出すだけの薄い
-定義にする。CI/CDのベースロジックはPlatform teamが`idp-workflows`側で一元管理する。
+定義にする。CI/CDのベースロジックはプラットフォームチームが`idp-workflows`側で一元管理する。
 
 新規アプリの追加方法は[`docs/adding-a-new-app.md`](./docs/adding-a-new-app.md)を参照。

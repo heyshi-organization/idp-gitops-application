@@ -14,10 +14,10 @@ jobs:
     steps:
       - name: Check Argo CD sync/health status
         run: |
-          argocd app get sample-app --grpc-web -o json \
+          argocd app get apple --grpc-web -o json \
             | jq -e '.status.sync.status == "Synced" and .status.health.status == "Healthy"'
 
-      - name: Check sample-app /metrics is reachable in-cluster
+      - name: Check apple /metrics is reachable in-cluster
         run: |
-          kubectl -n sample-app run smoke-curl --rm -i --restart=Never --image=curlimages/curl -- \
-            curl -sf http://sample-app.sample-app.svc.cluster.local:3000/metrics | head -5
+          kubectl -n apple run smoke-curl --rm -i --restart=Never --image=curlimages/curl -- \
+            curl -sf http://apple.apple.svc.cluster.local:3000/metrics | head -5

@@ -1,0 +1,23 @@
+# サンプルアプリ本体。このリポジトリのmanifests/apple/ をそのまま同期する。
+# team-a AppProjectに属するため、destination/リソース種別はAppProjectで制限されている
+# (idp-gitops-platformリポジトリのplatform/argocd-bootstrap/team-a-appproject.yaml参照)。
+# Namespaceはteam-a自身では作れない(プラットフォームチームが idp-gitops-platformリポジトリの
+# platform/teams/team-a/apple/namespace.yaml で用意する)ため、CreateNamespace=trueは付けていない。
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: apple
+  namespace: argocd
+spec:
+  project: team-a
+  source:
+    repoURL: https://github.com/heyshi-organization/idp-gitops-application.git
+    targetRevision: main
+    path: manifests/apple
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: apple
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
