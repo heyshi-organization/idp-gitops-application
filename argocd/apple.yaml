@@ -1,22 +1,35 @@
-# サンプルアプリ本体。このリポジトリのmanifests/apple/ をそのまま同期する。
-# team-a AppProjectに属するため、destination/リソース種別はAppProjectで制限されている
-# (idp-gitops-platformリポジトリのplatform/argocd-bootstrap/team-a-appproject.yaml参照)。
-# Namespaceはteam-a自身では作れない(プラットフォームチームが idp-gitops-platformリポジトリの
-# platform/teams/team-a/apple/namespace.yaml で用意する)ため、CreateNamespace=trueは付けていない。
+# サンプルアプリ本体。このリポジトリの manifests/apple/ をそのまま同期する。
+#
+# ★metadata.namespace について
+# このApplication CRは argocd ではなく、チームのワークロードNamespaceに置く。
+# 理由: Argo CDには「argocd Namespaceに置かれたApplicationはAppProjectの sourceNamespaces
+# 制約を受けず、任意のAppProjectを参照できる」という後方互換仕様がある。そのため argocd に
+# 置くと project: platform-services 等と書くだけで権限昇格できてしまう。
+# チームのNamespaceに置き、alpha AppProjectの sourceNamespaces で縛ることで、このApplicationが
+# alpha AppProject以外を参照できないようにしている。
+#
+# ここを argocd にすると alpha-boundary AppProjectの destinations 制約(チームのNamespaceのみ)に
+# 違反し、Argo CDに拒否される(黙って argocd に作られるより、エラーで気づける方が安全という設計)。
+#
+# ★Namespace命名規則: ns-gitops-team-<チーム名>-sys-<システム名>
+# Namespaceはプロダクトチーム自身では作れない(クラスタスコープ操作のため
+# clusterResourceWhitelist: [] で禁止されている)。プラットフォームチームが
+# idp-gitops-platform リポジトリの gitops/teams/<チーム名>/manifests/namespaces/<システム名>/ で
+# 払い出す。そのため CreateNamespace=true は付けていない。
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: apple
-  namespace: argocd
+  namespace: ns-gitops-team-alpha-sys-apple
 spec:
-  project: team-a
+  project: alpha
   source:
     repoURL: https://github.com/heyshi-organization/idp-gitops-application.git
     targetRevision: main
     path: manifests/apple
   destination:
     server: https://kubernetes.default.svc
-    namespace: apple
+    namespace: ns-gitops-team-alpha-sys-apple
   syncPolicy:
     automated:
       prune: true

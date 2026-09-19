@@ -6,18 +6,30 @@ on:
     types: [completed]
   workflow_dispatch: {}
 
+env:
+  # Namespace命名規則: ns-gitops-team-<チーム名>-sys-<システム名>
+  # (プラットフォームチームが idp-gitops-platform 側で払い出す)
+  APP_NAMESPACE: ns-gitops-team-alpha-sys-apple
+
 jobs:
   smoke:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
-    # gitops/apps/arc-runner-scale-set.yaml の runnerScaleSetName と合わせている
+    # gitops/platform-services/arc/values/runner-scale-set-values.yaml の
+    # runnerScaleSetName と合わせている
     runs-on: pe-env-runners
     steps:
       - name: Check Argo CD sync/health status
         run: |
-          argocd app get apple --grpc-web -o json \
+          # Application CR は argocd ではなくチームのNamespaceにあるため <ns>/<name> 形式で指定する
+          argocd app get "${APP_NAMESPACE}/apple" --grpc-web -o json \
             | jq -e '.status.sync.status == "Synced" and .status.health.status == "Healthy"'
 
       - name: Check apple /metrics is reachable in-cluster
         run: |
-          kubectl -n apple run smoke-curl --rm -i --restart=Never --image=curlimages/curl -- \
-            curl -sf http://apple.apple.svc.cluster.local:3000/metrics | head -5
+          # TODO(Phase 10): このstepは kubectl run でクラスタにPodを作るため、CIにクラスタへの
+          # 書き込み権限が必要になる。「CIからkubectlでクラスタを変更しない」という方針に
+          # 反するので、Argo CDのPostSync Hook(Job)に移し、CIは argocd app wait で
+          # 結果を見るだけにする予定。
+          kubectl -n "${APP_NAMESPACE}" run smoke-curl --rm -i --restart=Never \
+            --image=curlimages/curl -- \
+            curl -sf "http://apple.${APP_NAMESPACE}.svc.cluster.local:3000/metrics" | head -5
