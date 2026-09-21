@@ -23,7 +23,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: apple
+  name: app-alpha-apple
   namespace: ns-gitops-team-alpha-sys-apple
 spec:
   project: appproj-alpha-workloads

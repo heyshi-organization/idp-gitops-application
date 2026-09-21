@@ -2,7 +2,7 @@
 
 プロダクトチームが所有するワークロード用リポジトリ。ここに変更をpushすると、
 プラットフォームチーム管理の`idp-gitops-platform`側で生成されるApplication
-(`team-<チーム名>-repo-idp-gitops-application`)が`argocd/`配下を検知し、Argo CD経由で自動的に
+(`app-platform-<チーム名>-repo-idp-gitops-application`)が`argocd/`配下を検知し、Argo CD経由で自動的に
 クラスタへ反映される。
 
 ## ディレクトリ構成

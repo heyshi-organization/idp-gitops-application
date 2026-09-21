@@ -1,9 +1,9 @@
 # argocd/
 
-Argo CD Applicationの定義を`<システム名>.yaml`(システム名そのまま、拡張子`.yaml`)で配置する。
+Argo CD Applicationの定義を`app-<チーム名>-<システム名>.yaml`(リソース名と一致させる)で配置する。
 
 このディレクトリ全体を、プラットフォームチーム管理の`idp-gitops-platform`側で生成される
-Application(`team-<チーム名>-repo-idp-gitops-application`)が監視しており、ファイルを
+Application(`app-platform-<チーム名>-repo-idp-gitops-application`)が監視しており、ファイルを
 追加してpushするだけで自動的にArgo CDへ登録・同期される。プラットフォームチーム側の作業は
 発生しない。
 
@@ -18,7 +18,7 @@ Application(`team-<チーム名>-repo-idp-gitops-application`)が監視してお
 
 ```yaml
 metadata:
-  name: <システム名>
+  name: app-<チーム名>-<システム名>
   namespace: ns-gitops-team-<チーム名>-sys-<システム名>   # ★必ず明示する
 spec:
   project: appproj-<チーム名>-workloads
