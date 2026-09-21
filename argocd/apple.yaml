@@ -4,16 +4,16 @@
 # このApplication CRは argocd ではなく、チームのワークロードNamespaceに置く。
 # 理由: Argo CDには「argocd Namespaceに置かれたApplicationはAppProjectの sourceNamespaces
 # 制約を受けず、任意のAppProjectを参照できる」という後方互換仕様がある。そのため argocd に
-# 置くと project: platform-services 等と書くだけで権限昇格できてしまう。
-# チームのNamespaceに置き、alpha-workloads AppProjectの sourceNamespaces で縛ることで、
-# このApplicationが alpha-workloads AppProject以外を参照できないようにしている。
+# 置くと project: appproj-platform-services 等と書くだけで権限昇格できてしまう。
+# チームのNamespaceに置き、appproj-alpha-workloads AppProjectの sourceNamespaces で縛ることで、
+# このApplicationが appproj-alpha-workloads AppProject以外を参照できないようにしている。
 #
-# ここを argocd にすると alpha-apps AppProjectの destinations 制約(チームのNamespaceのみ)に
+# ここを argocd にすると appproj-platform-alpha-apps AppProjectの destinations 制約(チームのNamespaceのみ)に
 # 違反し、Argo CDに拒否される(黙って argocd に作られるより、エラーで気づける方が安全という設計)。
 #
-# ★alpha-apps と alpha-workloads の役割分担(プラットフォームチームが管理)
-#   alpha-apps      … このリポジトリの argocd/ に何を置けるか        = Application CR のみ
-#   alpha-workloads … そのApplicationが何を作れるか(下の project:) = Deployment/Service/ConfigMap
+# ★appproj-platform-alpha-apps と appproj-alpha-workloads の役割分担(プラットフォームチームが管理)
+#   appproj-platform-alpha-apps … このリポジトリの argocd/ に何を置けるか        = Application CR のみ
+#   appproj-alpha-workloads     … そのApplicationが何を作れるか(下の project:) = Deployment/Service/ConfigMap
 #
 # ★Namespace命名規則: ns-gitops-team-<チーム名>-sys-<システム名>
 # Namespaceはプロダクトチーム自身では作れない(クラスタスコープ操作のため
@@ -26,7 +26,7 @@ metadata:
   name: apple
   namespace: ns-gitops-team-alpha-sys-apple
 spec:
-  project: alpha-workloads
+  project: appproj-alpha-workloads
   source:
     repoURL: https://github.com/heyshi-organization/idp-gitops-application.git
     targetRevision: main
