@@ -4,9 +4,7 @@ metadata:
   name: apple
   labels:
     app: apple
-    # kube-prometheus-stackのPrometheusはデフォルトで `release: <helmリリース名>` ラベルの
-    # ServiceMonitorを拾う設定になっている。Applicationのrelease nameが `kube-prometheus-stack`
-    # であることに合わせている。
+    # kube-prometheus-stackは既定でrelease: <Helmリリース名>のServiceMonitorだけを拾う
     release: kube-prometheus-stack
 spec:
   selector:

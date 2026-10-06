@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
         - name: apple
-          # CIが `apps/apple/` への変更をpushするたびにこのタグを書き換える
-          # (.github/workflows/ci.yml 参照)。初回は README のフェーズ5に従って手動で反映する。
+          # タグはCIが書き換える(.github/workflows/ci.yml)
           image: ghcr.io/heyshi/develop-pe-env-apple:init
           ports:
             - name: http

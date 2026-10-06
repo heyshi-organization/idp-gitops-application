@@ -6,9 +6,9 @@
      (`ServiceMonitor`はkube-prometheus-stack導入まで一時的に除外中)
    - cluster-scopedリソース(Namespace等)は配置不可
    - `namespace:`は書かなくてよい。Application の`destination.namespace`に従って配置される
-3. `argocd/<システム名>.yaml`にArgo CD Application定義を追加
+3. `argocd/app-<チーム名>-<システム名>.yaml`にArgo CD Application定義を追加
    - `metadata.namespace`に`ns-gitops-team-<チーム名>-sys-<システム名>`を**必ず明示する**
-   - `spec.project`にチーム名のAppProjectを指定する
+   - `spec.project`に`appproj-<チーム名>-workloads`を指定する
    - 詳細は[`../argocd/README.md`](../argocd/README.md)を参照
 4. `.github/workflows/`にCI呼び出し用のworkflowを追加、または既存workflowのpathフィルタに
    `apps/<システム名>/**`を追加。ビルド・イメージpush・`manifests/<システム名>/`のimage tag書き換えといった
@@ -23,7 +23,8 @@ Namespaceの払い出しはプラットフォームチームの担当。先に�
 
 - `gitops/teams/<チーム名>/manifests/namespaces/<システム名>/`に
   Namespace / ResourceQuota / LimitRange / NetworkPolicy / RBAC を追加
-- `<チーム名>` AppProjectの`destinations`に追加
+
+AppProjectの`destinations`は`ns-gitops-team-<チーム名>-sys-*`のパターンで書かれているので、AppProjectの変更は要らない。
 
 Namespace名は`ns-gitops-team-<チーム名>-sys-<システム名>`の規則に従う。
 これが揃っていないとAppProjectのパターンにマッチせず、Applicationが拒否される。

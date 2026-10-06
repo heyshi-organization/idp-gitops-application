@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-  # servicemonitor.yaml: kube-prometheus-stack(ServiceMonitor CRDの提供元)が未導入のため一時的に除外。
-  # Prometheus導入時に復活させること。
+  # servicemonitor.yamlはkube-prometheus-stack導入時に戻す

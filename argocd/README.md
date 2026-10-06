@@ -26,10 +26,11 @@ spec:
     namespace: ns-gitops-team-<チーム名>-sys-<システム名>
 ```
 
-- **`metadata.namespace`を必ず明示する。** 省略や`argocd`の指定は、`appproj-platform-<チーム名>-apps` AppProjectの
+- **`metadata.namespace`を必ず明示する。** `argocd`を指定すると、`appproj-platform-<チーム名>-apps` AppProjectの
   `destinations`制約に違反して拒否される。Argo CDの後方互換仕様により`argocd` Namespaceの
   Applicationは任意のAppProjectを参照できてしまうため、チームのApplicationは
-  チーム自身のNamespaceに置くことになっている
+  チーム自身のNamespaceに置くことになっている。省略した場合は拒否されず、プラットフォームチームが
+  決めた既定のNamespace(チームのNamespaceのどれか)に置かれるので、意図しない場所に作られうる
 - **`project`には`appproj-<チーム名>-workloads`を指定する。** デプロイ先Namespace・許可リソース種別が
   そのAppProjectで制限されているので、その範囲内で定義すること
 - **このディレクトリにはApplication定義しか置けない。** `appproj-platform-<チーム名>-apps` AppProjectの
@@ -40,5 +41,5 @@ spec:
 ## 新しいNamespaceが必要なとき
 
 Namespaceの作成はクラスタスコープ操作なので、プロダクトチームでは作れない。
-プラットフォームチームに払い出しを依頼し、`appproj-<チーム名>-workloads` AppProjectの`destinations`に
-追加してもらってから、このディレクトリにApplicationを追加する。
+プラットフォームチームに払い出しを依頼し、Namespaceが作られてから、このディレクトリにApplicationを追加する。
+AppProjectの`destinations`は`ns-gitops-team-<チーム名>-sys-*`のパターンで書かれているので、AppProject側の変更は要らない。

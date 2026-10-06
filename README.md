@@ -11,7 +11,7 @@
 idp-gitops-application/
 ├── apps/<システム名>/       … アプリケーションのソースコード
 ├── manifests/<システム名>/  … アプリケーションのK8sマニフェスト(CIがimage tagを書き換える)
-├── argocd/<システム名>.yaml … Argo CD Application定義(チームのAppProject配下)
+├── argocd/app-<チーム名>-<システム名>.yaml … Argo CD Application定義(チームのAppProject配下)
 ├── docs/                  … プロダクトチーム向けドキュメント
 └── .github/workflows/     … CI/CD呼び出し用workflow(実処理はidp-workflowsのReusable workflow)
 ```
