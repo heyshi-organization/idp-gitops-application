@@ -16,7 +16,6 @@ spec:
     spec:
       containers:
         - name: apple
-          # タグはCIが書き換える(.github/workflows/ci.yml)
           image: ghcr.io/heyshi/develop-pe-env-apple:init
           ports:
             - name: http

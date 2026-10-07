@@ -10,10 +10,9 @@
 ```
 idp-gitops-application/
 ├── apps/<システム名>/       … アプリケーションのソースコード
-├── manifests/<システム名>/  … アプリケーションのK8sマニフェスト(CIがimage tagを書き換える)
+├── manifests/<システム名>/  … アプリケーションのK8sマニフェスト
 ├── argocd/app-<チーム名>-<システム名>.yaml … Argo CD Application定義(チームのAppProject配下)
-├── docs/                  … プロダクトチーム向けドキュメント
-└── .github/workflows/     … CI/CD呼び出し用workflow(実処理はidp-workflowsのReusable workflow)
+└── docs/                  … プロダクトチーム向けドキュメント
 ```
 
 1つのシステムが複数マイクロサービスで構成される場合、それぞれを別のシステムとして扱い、
@@ -30,8 +29,9 @@ ns-gitops-team-<チーム名>-sys-<システム名>
 Application CRは`argocd` Namespaceではなく、このNamespaceに置く
 (理由は[`argocd/README.md`](./argocd/README.md)を参照)。
 
-`.github/workflows/`配下のファイルは、ビルド・イメージpush・manifest更新・smoke testといった
-実処理を持たず、`idp-workflows`リポジトリのReusable workflowを`uses:`で呼び出すだけの薄い
-定義にする。CI/CDのベースロジックはプラットフォームチームが`idp-workflows`側で一元管理する。
+CI/CDは未整備。ARCの導入が終わった後、`idp-workflows`リポジトリのReusable workflowを`uses:`で
+呼び出すだけの薄い定義として`.github/workflows/`に追加する(CI/CDのベースロジックはプラットフォームチームが
+`idp-workflows`側で一元管理する)。それまでは、イメージのビルド・pushと`manifests/<システム名>/`のimage tagの
+更新を手作業で行う。
 
 新規アプリの追加方法は[`docs/adding-a-new-app.md`](./docs/adding-a-new-app.md)を参照。

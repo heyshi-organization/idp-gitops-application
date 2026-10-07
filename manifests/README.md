@@ -1,7 +1,6 @@
 # manifests/
 
 各アプリケーションのK8sマニフェストを`manifests/<システム名>/`単位で配置する。
-CIがビルド後にimage tagを書き換えてcommitする対象。
 
 プラットフォームチーム管理のチームAppProjectで、配置できるリソース種別が制限されている
 (`Deployment` / `Service` / `ConfigMap`のみ、cluster-scopedリソース不可。`ServiceMonitor`はkube-prometheus-stack導入まで除外中)。

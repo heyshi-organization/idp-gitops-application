@@ -2,18 +2,16 @@
 
 1. `apps/<システム名>/`にソースコードを追加
 2. `manifests/<システム名>/`にK8sマニフェストを追加
-   - 許可されているリソース種別: `Deployment` / `Service` / `ConfigMap` / `ServiceMonitor`
-     (`ServiceMonitor`はkube-prometheus-stack導入まで一時的に除外中)
+   - 許可されているリソース種別: `Deployment` / `Service` / `ConfigMap`
+     (`ServiceMonitor`はkube-prometheus-stack導入まで除外中)
    - cluster-scopedリソース(Namespace等)は配置不可
    - `namespace:`は書かなくてよい。Application の`destination.namespace`に従って配置される
 3. `argocd/app-<チーム名>-<システム名>.yaml`にArgo CD Application定義を追加
    - `metadata.namespace`に`ns-gitops-team-<チーム名>-sys-<システム名>`を**必ず明示する**
    - `spec.project`に`appproj-<チーム名>-workloads`を指定する
    - 詳細は[`../argocd/README.md`](../argocd/README.md)を参照
-4. `.github/workflows/`にCI呼び出し用のworkflowを追加、または既存workflowのpathフィルタに
-   `apps/<システム名>/**`を追加。ビルド・イメージpush・`manifests/<システム名>/`のimage tag書き換えといった
-   実処理は`idp-workflows`リポジトリのReusable workflowに定義されているので、このリポジトリ側は
-   `uses:`でそれを呼び出し、アプリ名やパスを`with:`で渡すだけでよい
+
+CI/CDは未整備のため、イメージのビルド・pushとimage tagの更新は手作業で行う([`../README.md`](../README.md))。
 
 ## 新しいNamespaceが必要な場合
 
