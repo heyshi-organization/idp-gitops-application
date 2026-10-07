@@ -12,12 +12,11 @@
 <body>
   <h1>apple</h1>
   <p>
-    develop-pe-env の監視検証用サンプルアプリです。
-    Kind上にデプロイされ、Prometheus/Grafanaでのメトリクス監視の対象になります。
+    IDP(idp-gitops-platform)上に、Argo CD経由でデプロイする検証用サンプルアプリです。
   </p>
   <ul>
     <li><a href="/api/hello">/api/hello</a> — 動作確認用のダミーAPI</li>
-    <li><a href="/metrics">/metrics</a> — Prometheusのスクレイプ対象</li>
+    <li><a href="/metrics">/metrics</a> — Prometheus形式のメトリクス(監視基盤は導入予定)</li>
     <li><a href="/healthz">/healthz</a> — liveness/readinessプローブ用</li>
   </ul>
 </body>
