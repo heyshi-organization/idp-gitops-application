@@ -35,3 +35,8 @@ CI/CDは未整備。ARCの導入が終わった後、`idp-workflows`リポジト
 更新を手作業で行う。
 
 新規アプリの追加方法は[`docs/adding-a-new-app.md`](./docs/adding-a-new-app.md)を参照。
+
+## 開発環境
+
+`.devcontainer/`にNode.js 24・Yarn(Corepack)・docker-outside-of-docker・`gh`が入った開発環境を用意している。
+VS Codeの`Dev Containers: Reopen in Container`で開く。
